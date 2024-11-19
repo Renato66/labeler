@@ -29,4 +29,14 @@ describe('getIssueLabels function', () => {
 
     expect(result).toEqual(['Label1'])
   })
+
+  test('should add 2 labels when there is a synonym for the labels available', () => {
+    const body = 'Body with labels: Synonym1'
+    const labels = ['Label1', 'Label2']
+    const labelsSynonyms = { Label1: ['Synonym1'], Label2: ['Synonym1'] }
+
+    const result = getIssueLabels(body, labels, labelsSynonyms)
+
+    expect(result).toEqual(['Label1', 'Label2'])
+  })
 })
