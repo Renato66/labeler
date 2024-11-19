@@ -22,15 +22,18 @@ const compareLabels = (
         'gi'
       )
     : null
-  let synonymsObject: Record<string, string> = {}
+  let synonymsObject: Record<string, string[]> = {}
   for (let label in labelsSynonyms) {
     labelsSynonyms[label].forEach((synonym) => {
-      synonymsObject[synonym.toLowerCase()] = label
+      synonymsObject[synonym.toLowerCase()] = [
+        ...(synonymsObject[synonym.toLowerCase()] || []),
+        label
+      ]
     })
   }
   const hasLabels = (line: string): string[] => {
     const selectedLabels = labelsRegex ? line.match(labelsRegex) || [] : []
-    return selectedLabels.map((elem) => {
+    return selectedLabels.flatMap((elem) => {
       return (
         synonymsObject[elem.toLowerCase()] ||
         labels.find((label) => label.toLowerCase() === elem.toLowerCase()) ||
